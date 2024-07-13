@@ -1,0 +1,97 @@
+#include <stdio.h>
+#include <ctype.h>  // For tolower function
+
+// Function to clear input buffer
+void clear_input_buffer() {
+    while (getchar() != '\n');
+}
+
+// Function to print bold text
+void print_bold(char *text) {
+    printf("\033[1m%s\033[0m", text);  // ANSI escape sequence for bold text
+}
+
+// Function to print italic text
+void print_italic(char *text) {
+    printf("\033[3m%s\033[0m", text);  // ANSI escape sequence for italic text
+}
+
+// Function to print underlined text
+void print_underline(char *text) {
+    printf("\033[4m%s\033[0m", text);  // ANSI escape sequence for underlined text
+}
+
+// Structure to hold each question and its correct answer
+struct Question {
+    char prompt[200];
+    char options[4][50];
+    char answer;
+};
+
+// Function to run the quiz
+void run_quiz(struct Question questions[], int num_questions) {
+    char user_answer;
+    int score = 0;
+
+    for (int i = 0; i < num_questions; i++) {
+        printf("\n");
+        print_italic(questions[i].prompt); // Print question prompt in italic
+        
+        for (int j = 0; j < 4; j++) {
+            printf("\n");
+            print_underline(questions[i].options[j]); // Print options in underlined format
+        }
+        
+        printf("\nEnter your answer (a, b, c, or d): ");
+        scanf(" %c", &user_answer);  // Note the space before %c to consume newline
+
+        // Convert user_answer to lowercase for case-insensitive comparison
+        user_answer = tolower(user_answer);
+
+        if (user_answer == questions[i].answer) {
+            printf("Correct!\n");
+            score++;
+        } else {
+            printf("Wrong! The correct answer is '%c'.\n", questions[i].answer);
+        }
+
+        clear_input_buffer();  // Clear any extra input from buffer
+    }
+
+    printf("\nQuiz ended. You scored %d out of %d.\n", score, num_questions);
+}
+
+int main() {
+    printf("Welcome to the Quiz Game!\n\n");
+    
+    print_bold("Jay Jagannath!\n"); // Print bold wish "Jay Jagannath!"
+    
+    struct Question questions[] = {
+        {
+            "\n*Which is the capital city of Odisha?*\n",
+            {"_a) Bhubaneswar_", "_b) Cuttack_", "_c) Puri_", "_d) Rourkela_"},
+            'a'
+        },
+        {
+            "\n*Which is the famous classical dance form of Odisha?*\n",
+            {"_a) Kathak_", "_b) Bharatanatyam_", "_c) Odissi_", "_d) Kuchipudi_"},
+            'c'
+        },
+        {
+            "\n*Which temple in Odisha is known as the 'White Pagoda'?*\n",
+            {"_a) Lingaraja Temple_", "_b) Jagannath Temple_", "_c) Sun Temple_", "_d) Mukteshwar Temple_"},
+            'c'
+        },
+        {
+            "\n*Which national park in Odisha is famous for its population of Royal Bengal Tigers?*\n",
+            {"_a) Simlipal National Park_", "_b) Bhitarkanika National Park_", "_c) Chilika Wildlife Sanctuary_", "_d) Nandankanan Zoological Park_"},
+            'a'
+        }
+    };
+
+    int num_questions = sizeof(questions) / sizeof(questions[0]);
+
+    run_quiz(questions, num_questions);
+
+    return 0;
+}
